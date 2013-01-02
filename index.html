@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="viewport" content="initial-scale = 1.0, user-scalable = no">
+		<title>To Do List</title>
+		<link rel="stylesheet" href="libs/jquery.mobile-1.2.0.css">
+		<script src="libs/jquery-1.8.3.js"></script>
+		<script src="libs/jquery.mobile-1.2.0.js"></script>
+		<script src="app.js"></script>
+	</head>
+	<body>
+		<div data-role="page" id="indexPage" data-theme="b">
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h1>To Do List</h1>
+				<a href="form.html" data-role="button" data-icon="plus" id="newTask" class="ui-btn-right">New</a>
+
+			</div>
+
+			<div data-role="content" >
+
+				<ul data-role="listview" data-filter="true" data-theme="c">
+					<li>
+						<a href="#first">First element</a>
+						<a href="#setasdone"></a>
+					</li>
+					<li>
+						<a href="#second">Second element</a>
+						<a href="#setasdone"></a>
+					</li>
+					<li>
+						<a href="#third">Third element</a>
+						<a href="#setasdone"></a>
+					</li>
+				</ul>
+				<div data-role="fieldcontainer">
+					<label for="category">To Do List</label>
+					<select id="category" name="category">
+						<option value="0">New Category...</option>
+						<option value="1">Home</option>
+						<option value="2">Office</option>
+					</select>
+				</div>
+			</div>
+
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				
+			</div>
+		</div>
+	</body>
+</html>
