@@ -14,7 +14,7 @@
 		<div data-role="page" id="indexPage" data-theme="b">
 			<div data-role="header" data-position="fixed" data-theme="b">
 				<h1>To Do List</h1>
-				<a href="form.html" data-role="button" data-icon="plus" id="newTask" class="ui-btn-right">New</a>
+				<a href="#taskFormPage" data-role="button" data-icon="plus" id="newTask" class="ui-btn-right">New</a>
 
 			</div>
 
@@ -45,7 +45,57 @@
 			</div>
 
 			<div data-role="footer" data-position="fixed" data-theme="b">
-				
+
+			</div>
+		</div>
+
+		<div data-role="page" id="taskFormPage" data-theme="b">
+			<div data-role="header" data-position="fixed" data-theme="b">
+				<h1>Task</h1>
+				<a href="#indexPage" data-role="button" data-direction="reverse">Cancel</a>
+				<a href="#indexPage" data-role="button" class="ui-btn-right" data-direction="reverse">Save</a>
+			</div>
+			<div data-role="content">
+				<form action="" method="post" id="form">
+					<ul data-role="listview" id="taskDetailsFields">
+						<li data-role="list-divider">
+							Task details:
+						</li>
+						<li data-role="fieldcontain">
+							<label for="taskName">Name:</label>
+							<input type="text" name="taskName" id="taskName" value="" />
+						</li>
+						<li data-role="fieldcontainer">
+							<label for="due-date">Due Date</label>
+							<input type="date" id="due-date" name="due-date">
+						</li>
+						<li data-role="fieldcontain">
+							<label for="taskDescription">Description:</label>
+							<textarea cols="40" rows="8" name="taskDescription" id="taskDescription"></textarea>
+						</li>
+
+						<li data-role="list-divider">
+							Attach
+						</li>
+						<div data-role="button" data-inline="true" id="Photo">
+							Photo
+						</div>
+						<div data-role="button" data-inline="true" id="Audio">
+							Audio
+						</div>
+						<div data-role="button" data-inline="true" id="QR">
+							QR
+						</div>
+
+						<label for="taskCompleted">Completed</label>
+						<input type="checkbox" id="taskCompleted" name="taskCompleted" value="no">
+
+					</ul>
+				</form>
+			</div>
+			<div data-role="footer" data-position="fixed" data-theme="b">
+				<a href="#indexPage" data-role="button" class="ui-btn-right" data-direction="reverse">Delete</a>
+
 			</div>
 		</div>
 	</body>
