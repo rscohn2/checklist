@@ -42,6 +42,18 @@
 	}
 
 
+	TaskList.prototype.writeLocalStorage = function() {
+		if (localStorage) {
+			localStorage['tasks'] = JSON.stringify(this.tasks)
+		}
+	}
+
+	TaskList.prototype.readLocalStorage = function() {
+		if (localStorage) {
+			this.tasks = JSON.parse(localStorage['tasks']);
+		}
+	}
+
 	TaskList.prototype.add = function() {
 		var newTask = new Task();
 		this.currentTask = this.tasks.length;
@@ -51,6 +63,19 @@
 
 	TaskList.prototype.getCurrentTask = function() {
 		return this.tasks[this.currentTask];
+	}
+
+	TaskList.prototype.deleteCurrentTask = function() {
+		this.tasks.splice(this.currentTask, 1);
+		this.writeLocalStorage();
+		this.render();
+	}
+
+	TaskList.prototype.updateTask = function() {
+		var t = this.getCurrentTask();
+		t.updateFromForm();
+		this.render();
+		this.writeLocalStorage();
 	}
 
 	TaskList.prototype.render = function() {
@@ -65,13 +90,13 @@
 			return function(event, data) {
 			};
 		};
-		
+
 		var list = $('#taskList');
 		list.empty();
-		
+
 		for (var i = 0; i < this.tasks.length; i++) {
 			var task = this.tasks[i];
-		
+
 			// Don't display done tasks
 			if (task.done) {
 				continue;
@@ -81,32 +106,31 @@
 			 * For each task, create something like this:
 			 * <li>
 			 * 		<a href='#taskFormPage' data-transition='slide'>Task Name</a>
-			 * 		<a></a>
 			 * </li>
 			 */
 			console.dir('Task: ' + task.name);
 			console.dir(task);
 			var edit = $('<a>');
-			var done = $('<a>');
 			var li = $('<li>');
 			edit.attr('href', '#taskFormPage');
 			edit.attr('data-transition', 'slide');
 			edit.bind('tap', createEditTapHandler(i));
 			edit.append(task.name);
 
-			var done = $('<a>');
-			done.bind('tap', createDoneTapHandler(i));
-
 			li.append(edit);
-			li.append(done);
 			list.append(li);
+
+			// Tell JQM to do its magic to the inserted li elements
 			list.listview('refresh');
 		}
 
 	}
 	var taskList = new TaskList();
+	taskList.readLocalStorage();
 
 	$('#indexPage').live('pageinit', function() {
+
+		taskList.render();
 
 		$('#newTaskButton').bind('tap', function(event, data) {
 			console.dir('New task');
@@ -116,13 +140,16 @@
 
 		$('#saveTaskButton').bind('tap', function(event, data) {
 			console.dir('Save task');
-			var t = taskList.getCurrentTask();
-			t.updateFromForm();
-			taskList.render();
+			taskList.updateTask();
 		});
 
 		$('#cancelTaskButton').bind('tap', function(event, data) {
 			console.dir('Cancel task update');
+		});
+
+		$('#deleteTaskButton').bind('tap', function(event, data) {
+			console.dir('Delete task');
+			taskList.deleteCurrentTask();
 		});
 	});
 

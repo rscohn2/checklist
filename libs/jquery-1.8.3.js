@@ -1,1 +1,1 @@
-/Users/rscohn1/dev/jquery/jquery-1.8.3.js
+/Users/rscohn1/dev/jslibs/jquery/jquery-1.8.3.js
