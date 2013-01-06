@@ -23,6 +23,7 @@ $( function() {'use strict';
 			app.TaskList.on('add', this.addOne, this);
 			app.TaskList.on('reset', this.reset, this);
 
+			app.TaskForm = new app.TaskFormView();
 			app.TaskList.fetch();
 		},
 
@@ -30,9 +31,8 @@ $( function() {'use strict';
 			console.log('New Task');
 			var task = new app.Task();
 			app.TaskList.add(task);
-			var view = new app.TaskFormView({
-				model : task
-			});
+			app.TaskForm.model = task;
+			app.TaskForm.render()
 		},
 		
 		render : function() {

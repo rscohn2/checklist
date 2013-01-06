@@ -13,6 +13,7 @@ $(function() {'use strict';
 
 		// The DOM events specific to an item.
 		events : {
+			'tap a' : 'edit',
 			/*
 			'click .toggle' : 'togglecompleted',
 			'dblclick label' : 'edit',
@@ -28,6 +29,11 @@ $(function() {'use strict';
 			this.model.on('destroy', this.remove, this);
 		},
 
+		edit : function() {
+			app.TaskForm.model = this.model;
+			app.TaskForm.render();
+		},
+		
 		// Re-render the titles of the todo item.
 		render : function() {
 			console.log('render task' + this.model.get('name'));
