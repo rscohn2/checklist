@@ -28,6 +28,11 @@ $( function() {'use strict';
 
 		newTask : function() {
 			console.log('New Task');
+			var task = new app.Task();
+			app.TaskList.add(task);
+			var view = new app.TaskFormView({
+				model : task
+			});
 		},
 		
 		render : function() {
@@ -47,6 +52,7 @@ $( function() {'use strict';
 		},
 
 		addOne : function(task) {
+			console.log('addOne: ' + task.name);
 			var view = new app.TaskView({
 				model : task
 			});

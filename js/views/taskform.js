@@ -1,0 +1,43 @@
+var app = app || {};
+
+// References DOM, so delay until ready
+$( function() {'use strict';
+	var taskNameEl = $('#taskName');
+	var taskDescriptionEl = $('#taskDescription');
+
+	app.TaskFormView = Backbone.View.extend({
+
+		el : '#taskFormPage',
+
+		// Delegated events for creating new items, and clearing completed ones.
+		events : {
+			'tap #saveTaskButton' : 'saveTask',
+			'tap #cancelTaskButton' : 'cancelChangeTask'
+		},
+
+		initialize : function() {
+			console.log('taskform view initialized');
+		},
+
+		cancelChangeTask : function() {
+			console.log('Cancel change task');
+		},
+
+		saveTask : function() {
+			console.log('Save task');
+			var task = this.model;
+			task.set(
+				{
+					name: taskNameEl.val(),
+					description: taskDescriptionEl.val()
+				});
+		},
+
+		render : function() {
+			console.log('Render task form');
+			var task = this.model;
+			taskNameEl.val(task.escape('name'));
+			taskDescriptionEl.val(task.escape('description'));
+		},
+	});
+}())
