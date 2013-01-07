@@ -4,7 +4,7 @@ var app = app || {};
 $( function() {'use strict';
 
 	var tasklist = $('#taskList');
-	
+
 	// The Application
 	// ---------------
 
@@ -32,9 +32,9 @@ $( function() {'use strict';
 			var task = new app.Task();
 			app.TaskList.add(task);
 			app.TaskForm.model = task;
-			app.TaskForm.render()
+			app.TaskForm.render();
 		},
-		
+
 		render : function() {
 			console.log('Render app');
 			console.log('refresh listview');
@@ -52,11 +52,11 @@ $( function() {'use strict';
 		},
 
 		addOne : function(task) {
-			console.log('addOne: ' + task.name);
+			console.log('addOne: ' + task.get('name'));
 			var view = new app.TaskView({
 				model : task
 			});
-			tasklist.append(view.el);
+			tasklist.append(view.$el);
 			return view;
 		},
 	});
