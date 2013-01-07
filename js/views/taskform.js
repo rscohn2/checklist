@@ -12,7 +12,8 @@ $( function() {'use strict';
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #saveTaskButton' : 'saveTask',
-			'tap #cancelTaskButton' : 'cancelChangeTask'
+			'tap #cancelTaskButton' : 'cancelChangeTask',
+			'tap #deleteTaskButton' : 'deleteTask'
 		},
 
 		initialize : function() {
@@ -23,6 +24,10 @@ $( function() {'use strict';
 			console.log('Cancel change task');
 		},
 
+		deleteTask : function() {
+			this.model.destroy();
+		},
+		
 		saveTask : function() {
 			console.log('Save task');
 			var task = this.model;
