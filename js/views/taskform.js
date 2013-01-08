@@ -4,6 +4,7 @@ var app = app || {};
 $( function() {'use strict';
 	var taskNameEl = $('#taskName');
 	var taskDescriptionEl = $('#taskDescription');
+	var taskDoneEl = $('#taskDone');
 
 	app.TaskFormView = Backbone.View.extend({
 
@@ -34,7 +35,8 @@ $( function() {'use strict';
 			task.set(
 				{
 					name: taskNameEl.val(),
-					description: taskDescriptionEl.val()
+					description: taskDescriptionEl.val(),
+					done: taskDoneEl.val() == 'yes'
 				});
 		},
 
@@ -43,6 +45,7 @@ $( function() {'use strict';
 			var task = this.model;
 			taskNameEl.val(task.escape('name'));
 			taskDescriptionEl.val(task.escape('description'));
+			taskDoneEl.val(task.get('done') ? 'yes' : 'no').slider('refresh');
 		},
 	});
 }())

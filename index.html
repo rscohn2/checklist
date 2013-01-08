@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 
 <html>
-<!--	
-<html manifest='app.manifest'>
--->	
+	<!--
+	<html manifest='app.manifest'>
+	-->
 	<head>
 		<meta charset="utf-8">
 		<meta name="apple-mobile-web-app-capable" content="yes">
@@ -70,8 +70,14 @@
 							<li data-role='list-divider'>
 								Status
 							</li>
-							<label for="taskCompleted">Completed</label>
-							<input type="checkbox" id="taskCompleted" name="taskCompleted" value="no">
+
+							<li>
+								<label for="taskDone">Done</label>
+								<select name='taskDone' id='taskDone' data-role='slider'>
+									<option value='no'>No</option>
+									<option value='yes'>Yes</option>
+								</select>
+							</li>
 
 							<a data-role='button' href='#indexPage' data-transition='slide' data-direction='reverse' data-theme='e' id='deleteTaskButton'> Delete </a>
 
