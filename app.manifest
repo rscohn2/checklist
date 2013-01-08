@@ -1,0 +1,24 @@
+CACHE MANIFEST
+
+CACHE:
+	index.html
+	libs/jquery.mobile-1.2.0.css
+	libs/jquery-1.8.3.js
+	libs/jquery.mobile-1.2.0.js
+	libs/underscore.js
+	libs/backbone.js
+	libs/backbone-localStorage.js
+	libs/images/ajax-loader.gif
+	libs/images/icons-18-white.png
+	libs/images/icons-18-black.png
+	libs/images/icons-36-white.png
+	libs/images/icons-36-black.png
+
+	js/models/task.js
+	js/collections/tasklist.js
+	js/views/app.js
+	js/views/task.js
+	js/views/taskform.js
+	js/app.js
+	
+	
