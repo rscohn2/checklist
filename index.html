@@ -68,15 +68,20 @@
 							</div>
 
 							<li data-role='list-divider'>
-								Status
+								Completion Status
 							</li>
 
 							<li>
 								<label for="taskDone">Done</label>
-								<select name='taskDone' id='taskDone' data-role='slider'>
-									<option value='no'>No</option>
-									<option value='yes'>Yes</option>
-								</select>
+								<input type='checkbox' id='taskDone' name='taskDone'>
+							</li>
+							
+							<li>
+								<div id='taskDoneDate'></div>
+							</li>
+							
+							<li>
+								<div id='taskDoneLoc'></div>
 							</li>
 
 							<a data-role='button' href='#indexPage' data-transition='slide' data-direction='reverse' data-theme='e' id='deleteTaskButton'> Delete </a>
