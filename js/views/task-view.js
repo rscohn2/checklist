@@ -3,36 +3,29 @@ var app = app || {};
 // References DOM so delay execution
 $(function() {'use strict';
 
-	console.log('TaskView created');
-	app.TaskView = Backbone.View.extend({
+	app.TaskLView = Backbone.View.extend({
 
 		tagName : 'li',
 
 		// The DOM events specific to an item.
 		events : {
-			'tap a' : 'edit',
-			/*
-			 'click .toggle' : 'togglecompleted',
-			 'dblclick label' : 'edit',
-			 'click .destroy' : 'clear',
-			 'keypress .edit' : 'updateOnEnter',
-			 'blur .edit' : 'close'
-			 */
+			'tap a' : 'edit'
 		},
 
 		initialize : function() {
-			console.log('task view initialized');
 			this.model.on('change', this.change, this);
 			this.model.on('destroy', this.remove, this);
 		},
 
 		edit : function() {
-			app.TaskForm.model = this.model;
-			app.TaskForm.render();
+			app.editTask = this.model;
+			app.populateTaskForm(this.model.toJSON());
 		},
 
-		safeSync : function() {
-			console.log('Sync: ' + this.model.get('name'));
+		change : function() {
+			console.log('change task: ' + this.model.get('name'));
+			this.render();
+
 			var o = {
 				success : function() {
 				},
@@ -41,32 +34,22 @@ $(function() {'use strict';
 				}
 			};
 
-			var method = 'update';
-			if (!this.model.created) {
-				method = 'create';
-				this.model.created = true;
-			}
-			console.log('   ' + method);
-			Backbone.sync(method, this.model, o);
-		},
-
-		change : function() {
-			console.log('change task: ' + this.model.get('name'));
-			this.render();
-			this.safeSync('create');
+			Backbone.sync('update', this.model, o);
 		},
 
 		// Remember the <a> so we can update it when there is a change event
-		$a : undefined,
-		
-		// Re-render the titles of the todo item.
+		$a : null,
+
 		render : function() {
-			console.log('render task' + this.model.get('name'));
 			var task = this.model;
+			console.log('render task' + task.get('name'));
 			if (!this.$a) {
 				// New view, insert the html into DOM and remember a handle to it so we can
 				// update it when it is changed
-				this.$a = $(this.make('a', {'href': '#taskFormPage', 'data-transition': 'slide'}));
+				this.$a = $(this.make('a', {
+					'href' : '#taskFormPage',
+					'data-transition' : 'slide'
+				}));
 				this.$el.append(this.$a);
 			}
 			// Update the <a>
