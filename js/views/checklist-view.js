@@ -7,6 +7,9 @@ $(function() {'use strict';
 
 		tagName : 'option',
 
+		events : {
+		},
+
 		initialize : function() {
 			console.log('checlist view initialized');
 			this.model.on('change', this.change, this);
@@ -36,11 +39,19 @@ $(function() {'use strict';
 
 		// The DOM events specific to an item.
 		events : {
+			'tap a' : 'edit'
 		},
 
 		initialize : function() {
 			this.model.on('change', this.change, this);
 			this.model.on('destroy', this.remove, this);
+		},
+
+		edit : function() {
+			console.log('checklist edit: ' + this.model.name);
+			app.editChecklist = this.model;
+			$('#checklistName').val(this.model.escape('name'));
+			$('#checklistDescription').val(this.model.escape('description'));
 		},
 
 		change : function() {

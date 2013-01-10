@@ -17,7 +17,11 @@ $( function() {'use strict';
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
-			'tap #saveChecklistButton' : 'newChecklist'
+			
+			'tap #newChecklistButton' : 'newChecklist',
+			'tap #saveChecklistButton' : 'saveChecklist',
+			'tap #cancelChecklistButton' : 'cancelChecklist'
+
 		},
 
 		initialize : function() {
@@ -40,12 +44,28 @@ $( function() {'use strict';
 		},
 
 		newChecklist : function() {
-			app.checklistCol.create({
-				name: $('#checklistName').val(),
-				description: $('#checklistDescription').val()
-			});				
+			$('#checklistName').val('');
+			$('#checklistDescription').val('');	
 		},
 		
+		saveChecklist : function() {
+			var o = {
+				name : $('#checklistName').val(),
+				description : $('#checklistDescription').val()
+			};
+
+			if (app.editChecklist) {
+				app.editChecklist.set(o);
+				app.editChecklist = null;
+			} else {
+				app.checklistCol.create(o);
+			}
+		},
+
+		cancelChecklist : function() {
+			app.editChecklist = null;
+		},
+
 		newTask : function() {
 			console.log('New Task');
 			var task = new app.Task();
@@ -57,7 +77,11 @@ $( function() {'use strict';
 		renderTask : function() {
 			console.log('Render app');
 			console.log('refresh listview');
-			tasklist.listview('refresh');
+			try {
+				tasklist.listview('refresh');
+			} catch(e) {
+				console.log("task refresh failed");
+			}
 		},
 
 		resetTask : function(tasks) {
@@ -80,7 +104,11 @@ $( function() {'use strict';
 		},
 
 		renderChecklist : function() {
-			checklistEl.listview('refresh');
+			try {
+				checklistEl.listview('refresh');
+			} catch (e) {
+				console.log("checklist refresh failed");
+			}
 		},
 
 		resetChecklist : function() {
@@ -100,6 +128,5 @@ $( function() {'use strict';
 			checklistEl.append(view.$el);
 			return view;
 		},
-
 	});
 }())
