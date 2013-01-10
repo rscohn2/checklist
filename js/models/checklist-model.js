@@ -1,6 +1,6 @@
 var app = app || {};
 ( function() {'use strict';
-		app.CheckList = Backbone.Model.extend({
+		app.Checklist = Backbone.Model.extend({
 			defaults : {
 				name : '',
 				description: ''

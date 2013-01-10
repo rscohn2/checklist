@@ -4,6 +4,7 @@ var app = app || {};
 $( function() {'use strict';
 
 	var tasklist = $('#taskList');
+	var checklistEl = $('#checklist');
 
 	// The Application
 	// ---------------
@@ -20,15 +21,18 @@ $( function() {'use strict';
 		},
 
 		initialize : function() {
-			app.TaskList.on('change', this.render, this);
-			app.TaskList.on('add', this.addOne, this);
-			app.TaskList.on('reset', this.reset, this);
+			app.TaskList.on('change', this.renderTask, this);
+			app.TaskList.on('add', this.addTask, this);
+			app.TaskList.on('reset', this.resetTask, this);
+			app.checklistCol.on('change', this.renderChecklist, this);
+			app.checklistCol.on('add', this.addChecklist, this);
+			app.checklistCol.on('reset', this.resetChecklist, this);
 
 			// Create the views
 			app.TaskForm = new app.TaskFormView();
-			app.tasklistChecklistSelect = new app.ChecklistSelectView({el: '#tasklistChecklistSelect'});
-			app.tasklistChecklistSelect.newOption = false;
-			app.taskFormChecklistSelect = new app.ChecklistSelectView({el: '#taskFormChecklistSelect'});
+			//app.tasklistChecklistSelect = new app.ChecklistSelectView({el: '#tasklistChecklistSelect'});
+			//app.tasklistChecklistSelect.newOption = false;
+			//app.taskFormChecklistSelect = new app.ChecklistSelectView({el: '#taskFormChecklistSelect'});
 
 			// Fetch the data
 			app.TaskList.fetch();
@@ -36,8 +40,10 @@ $( function() {'use strict';
 		},
 
 		newChecklist : function() {
-			var checklist = new app.Checklist();
-				
+			app.checklistCol.create({
+				name: $('#checklistName').val(),
+				description: $('#checklistDescription').val()
+			});				
 		},
 		
 		newTask : function() {
@@ -48,23 +54,23 @@ $( function() {'use strict';
 			app.TaskForm.render();
 		},
 
-		render : function() {
+		renderTask : function() {
 			console.log('Render app');
 			console.log('refresh listview');
 			tasklist.listview('refresh');
 		},
 
-		reset : function(tasks) {
+		resetTask : function(tasks) {
 			console.log('Reset');
 			tasklist.html('');
 			var addRender = function(task) {
-				this.addOne(task).render();
+				this.addTask(task).render();
 			};
 			app.TaskList.each(addRender, this);
 			this.render();
 		},
 
-		addOne : function(task) {
+		addTask : function(task) {
 			console.log('addOne: ' + task.get('name'));
 			var view = new app.TaskView({
 				model : task
@@ -72,5 +78,28 @@ $( function() {'use strict';
 			tasklist.append(view.$el);
 			return view;
 		},
+
+		renderChecklist : function() {
+			checklistEl.listview('refresh');
+		},
+
+		resetChecklist : function() {
+			checklistEl.html('');
+			var addRender = function(checklist) {
+				this.addChecklist(checklist).render();
+			};
+			app.checklistCol.each(addRender, this);
+			this.renderChecklist();
+		},
+
+		addChecklist : function(checklist) {
+			console.log('add checklist: ' + checklist.get('name'));
+			var view = new app.ChecklistLView({
+				model : checklist
+			});
+			checklistEl.append(view.$el);
+			return view;
+		},
+
 	});
 }())
