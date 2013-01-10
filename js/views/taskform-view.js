@@ -93,7 +93,7 @@ $( function() {'use strict';
 			taskDescriptionEl.val(task.escape('description'));
 			done = task.get('done');
 			taskDoneEl.prop('checked', done);
-			taskDoneEl.checkboxradio('refresh');
+			//taskDoneEl.checkboxradio('refresh');
 			doneDate = task.escape('doneDate');
 			doneLat = task.escape('doneLat');
 			doneLong = task.escape('doneLong');

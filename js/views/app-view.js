@@ -15,7 +15,8 @@ $( function() {'use strict';
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
-			'tap #newTaskButton' : 'newTask'
+			'tap #newTaskButton' : 'newTask',
+			'tap #saveChecklistButton' : 'newChecklist'
 		},
 
 		initialize : function() {
@@ -23,10 +24,22 @@ $( function() {'use strict';
 			app.TaskList.on('add', this.addOne, this);
 			app.TaskList.on('reset', this.reset, this);
 
+			// Create the views
 			app.TaskForm = new app.TaskFormView();
+			app.tasklistChecklistSelect = new app.ChecklistSelectView({el: '#tasklistChecklistSelect'});
+			app.tasklistChecklistSelect.newOption = false;
+			app.taskFormChecklistSelect = new app.ChecklistSelectView({el: '#taskFormChecklistSelect'});
+
+			// Fetch the data
 			app.TaskList.fetch();
+			app.checklistCol.fetch();
 		},
 
+		newChecklist : function() {
+			var checklist = new app.Checklist();
+				
+		},
+		
 		newTask : function() {
 			console.log('New Task');
 			var task = new app.Task();
