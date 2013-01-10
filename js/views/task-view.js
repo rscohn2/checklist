@@ -18,10 +18,8 @@ $(function() {'use strict';
 		},
 
 		edit : function() {
-			console.log('task edit: ' + this.model.name);
 			app.editTask = this.model;
-			$('#taskName').val(this.model.escape('name'));
-			$('#taskDescription').val(this.model.escape('description'));
+			app.populateTaskForm(this.model.toJSON());
 		},
 
 		change : function() {
