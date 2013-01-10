@@ -3,7 +3,7 @@ var app = app || {};
 // A tasklist is a collection of tasks
 ( function() {'use strict';
 
-		var TaskList = Backbone.Collection.extend({
+		var TaskCol = Backbone.Collection.extend({
 
 			// Reference to this collection's model.
 			model : app.Task,
@@ -11,5 +11,5 @@ var app = app || {};
 			localStorage : new Store('todo-tasklist')
 		});
 
-		app.TaskList = new TaskList();
+		app.taskCol = new TaskCol();
 	}());

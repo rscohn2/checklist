@@ -3,7 +3,7 @@ var app = app || {};
 // References DOM, so delay until ready
 $( function() {'use strict';
 
-	var tasklist = $('#taskList');
+	var tasklistEl = $('#taskList');
 	var checklistEl = $('#checklist');
 
 	// The Application
@@ -17,6 +17,8 @@ $( function() {'use strict';
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
+			'tap #saveTaskButton' : 'saveTask',
+			'tap #cancelTaskButton' : 'cancelTask',
 			
 			'tap #newChecklistButton' : 'newChecklist',
 			'tap #saveChecklistButton' : 'saveChecklist',
@@ -25,27 +27,28 @@ $( function() {'use strict';
 		},
 
 		initialize : function() {
-			app.TaskList.on('change', this.renderTask, this);
-			app.TaskList.on('add', this.addTask, this);
-			app.TaskList.on('reset', this.resetTask, this);
+			app.taskCol.on('change', this.renderTask, this);
+			app.taskCol.on('add', this.addTask, this);
+			app.taskCol.on('reset', this.resetTask, this);
 			app.checklistCol.on('change', this.renderChecklist, this);
 			app.checklistCol.on('add', this.addChecklist, this);
 			app.checklistCol.on('reset', this.resetChecklist, this);
 
 			// Create the views
-			app.TaskForm = new app.TaskFormView();
-			//app.tasklistChecklistSelect = new app.ChecklistSelectView({el: '#tasklistChecklistSelect'});
+			//app.TaskForm = new app.TaskFormView();
+			//app.taskColChecklistSelect = new app.ChecklistSelectView({el: '#taskColChecklistSelect'});
 			//app.tasklistChecklistSelect.newOption = false;
 			//app.taskFormChecklistSelect = new app.ChecklistSelectView({el: '#taskFormChecklistSelect'});
 
 			// Fetch the data
-			app.TaskList.fetch();
+			app.taskCol.fetch();
 			app.checklistCol.fetch();
 		},
 
 		newChecklist : function() {
 			$('#checklistName').val('');
 			$('#checklistDescription').val('');	
+			app.editChecklist = null;
 		},
 		
 		saveChecklist : function() {
@@ -64,43 +67,6 @@ $( function() {'use strict';
 
 		cancelChecklist : function() {
 			app.editChecklist = null;
-		},
-
-		newTask : function() {
-			console.log('New Task');
-			var task = new app.Task();
-			app.TaskList.add(task);
-			app.TaskForm.model = task;
-			app.TaskForm.render();
-		},
-
-		renderTask : function() {
-			console.log('Render app');
-			console.log('refresh listview');
-			try {
-				tasklist.listview('refresh');
-			} catch(e) {
-				console.log("task refresh failed");
-			}
-		},
-
-		resetTask : function(tasks) {
-			console.log('Reset');
-			tasklist.html('');
-			var addRender = function(task) {
-				this.addTask(task).render();
-			};
-			app.TaskList.each(addRender, this);
-			this.render();
-		},
-
-		addTask : function(task) {
-			console.log('addOne: ' + task.get('name'));
-			var view = new app.TaskView({
-				model : task
-			});
-			tasklist.append(view.$el);
-			return view;
 		},
 
 		renderChecklist : function() {
@@ -126,6 +92,56 @@ $( function() {'use strict';
 				model : checklist
 			});
 			checklistEl.append(view.$el);
+			return view;
+		},
+
+		newTask : function() {
+			$('#taskName').val('');
+			$('#taskDescription').val('');	
+			app.editTask = null;
+		},
+		
+		saveTask : function() {
+			var o = {
+				name : $('#taskName').val(),
+				description : $('#taskDescription').val()
+			};
+
+			if (app.editTask) {
+				app.editTask.set(o);
+				app.editTask = null;
+			} else {
+				app.taskCol.create(o);
+			}
+		},
+
+		cancelTask : function() {
+			app.editTask = null;
+		},
+
+		renderTask : function() {
+			try {
+				tasklistEl.listview('refresh');
+			} catch (e) {
+				console.log("tasklist refresh failed");
+			}
+		},
+
+		resetTask : function() {
+			tasklistEl.html('');
+			var addRender = function(checklist) {
+				this.addTask(task).render();
+			};
+			app.taskCol.each(addRender, this);
+			this.renderTask();
+		},
+
+		addTask : function(task) {
+			console.log('add task: ' + task.get('name'));
+			var view = new app.TaskLView({
+				model : task
+			});
+			tasklistEl.append(view.$el);
 			return view;
 		},
 	});

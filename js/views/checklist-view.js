@@ -55,7 +55,7 @@ $(function() {'use strict';
 		},
 
 		change : function() {
-			console.log('change task: ' + this.model.get('name'));
+			console.log('change checklist: ' + this.model.get('name'));
 			this.render();
 
 			var o = {
