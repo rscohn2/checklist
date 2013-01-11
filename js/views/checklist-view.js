@@ -15,16 +15,12 @@ $(function() {'use strict';
 			this.model.on('destroy', this.remove, this);
 		},
 
-		remove : function() {
-			return this;
-		},
-
 		change : function() {
 			this.render();
 		},
 
 		render : function() {
-			console.log('render checklist' + this.model.get('name'));
+			console.log('render checklist: ' + this.model.get('name'));
 			this.$el.val(this.model.cid);
 			this.$el.text(this.model.escape('name'));
 			return this;
