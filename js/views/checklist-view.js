@@ -50,8 +50,7 @@ $(function() {'use strict';
 		edit : function() {
 			console.log('checklist edit: ' + this.model.name);
 			app.editChecklist = this.model;
-			$('#checklistName').val(this.model.escape('name'));
-			$('#checklistDescription').val(this.model.escape('description'));
+			app.populateChecklistForm(this.model.toJSON());
 		},
 
 		change : function() {

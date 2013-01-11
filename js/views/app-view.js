@@ -10,6 +10,9 @@ $( function() {'use strict';
 	var taskDoneLatEl = $('#taskDoneLat');
 	var taskDoneLongEl = $('#taskDoneLong');
 	var taskDoneDateEl = $('#taskDoneDate');
+	
+	var checklistNameEl = $('#checklistName');
+	var checklistDescriptionEl = $('#checklistDescription');
 
 	app.populateTaskForm = function(task) {
 		taskNameEl.val(task.name);
@@ -26,6 +29,11 @@ $( function() {'use strict';
 
 	};
 
+	app.populateChecklistForm = function(checklist) {
+		checklistNameEl.val(checklist.name);
+		checklistDescriptionEl.val(checklist.description);
+	};
+	
 	// The Application
 	// ---------------
 
@@ -73,15 +81,14 @@ $( function() {'use strict';
 		},
 
 		newChecklist : function() {
-			$('#checklistName').val('');
-			$('#checklistDescription').val('');
+			app.populateChecklistForm({name: '', description: ''});
 			app.editChecklist = null;
 		},
 
 		saveChecklist : function() {
 			var o = {
-				name : $('#checklistName').val(),
-				description : $('#checklistDescription').val()
+				name : checklistNameEl.val(),
+				description : checklistDescriptionEl.val()
 			};
 
 			if (app.editChecklist) {
