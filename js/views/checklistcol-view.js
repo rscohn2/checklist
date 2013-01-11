@@ -5,6 +5,42 @@ var app = app || {};
  */
 $( function() {'use strict';
 
+	app.ChecklistColLView = Backbone.View.extend({
+		el : '#checklist',
+
+		initialize : function() {
+			app.checklistCol.on('change', this.render, this);
+			app.checklistCol.on('add', this.add, this);
+			app.checklistCol.on('reset', this.reset, this);
+		},
+		
+		render : function() {
+			try {
+				this.$el.listview('refresh');
+			} catch (e) {
+				console.log("checklist refresh failed");
+			}
+		},
+
+		reset : function() {
+			this.$el.html('');
+			var addRender = function(checklist) {
+				this.add(checklist).render();
+			};
+			app.checklistCol.each(addRender, this);
+			this.render();
+		},
+
+		add : function(checklist) {
+			console.log('add checklist: ' + checklist.get('name'));
+			var view = new app.ChecklistLView({
+				model : checklist
+			});
+			this.$el.append(view.$el);
+			return view;
+		},
+	});
+
 	app.ChecklistSelectView = Backbone.View.extend({
 
 		events : {
@@ -28,7 +64,7 @@ $( function() {'use strict';
 			var ni = selected.indexOf('newOption');
 			if (ni != -1) {
 				// Deselect newOption
-				selected.splice(ni,1);
+				selected.splice(ni, 1);
 				this.$el.val(selected);
 				this.addChecklist();
 			}

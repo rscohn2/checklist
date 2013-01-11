@@ -4,9 +4,6 @@ var app = app || {};
 $( function() {'use strict';
 
 	// jquery handles for the elements that contain inputs
-	var tasklistEl = $('#taskList');
-	var checklistEl = $('#checklist');
-
 	var taskNameEl = $('#taskName');
 	var taskDescriptionEl = $('#taskDescription');
 	var taskDoneEl = $('#taskDone');
@@ -53,13 +50,10 @@ $( function() {'use strict';
 		},
 
 		initialize : function() {
-			app.taskCol.on('change', this.renderTask, this);
-			app.taskCol.on('add', this.addTask, this);
-			app.taskCol.on('reset', this.resetTask, this);
-			app.checklistCol.on('change', this.renderChecklist, this);
-			app.checklistCol.on('add', this.addChecklist, this);
-			app.checklistCol.on('reset', this.resetChecklist, this);
-
+			// Create the views
+			app.checklistColLView = new app.ChecklistColLView();
+			app.taskColLView = new app.TaskColLView();
+			
 			// Create the views
 			//app.TaskForm = new app.TaskFormView();
 			//app.taskColChecklistSelect = new app.ChecklistSelectView({el: '#taskColChecklistSelect'});
@@ -102,32 +96,6 @@ $( function() {'use strict';
 			app.editChecklist = null;
 		},
 
-		renderChecklist : function() {
-			try {
-				checklistEl.listview('refresh');
-			} catch (e) {
-				console.log("checklist refresh failed");
-			}
-		},
-
-		resetChecklist : function() {
-			checklistEl.html('');
-			var addRender = function(checklist) {
-				this.addChecklist(checklist).render();
-			};
-			app.checklistCol.each(addRender, this);
-			this.renderChecklist();
-		},
-
-		addChecklist : function(checklist) {
-			console.log('add checklist: ' + checklist.get('name'));
-			var view = new app.ChecklistLView({
-				model : checklist
-			});
-			checklistEl.append(view.$el);
-			return view;
-		},
-
 		deleteTask : function() {
 			console.log('delete task');
 			if (app.editTask) {
@@ -168,32 +136,6 @@ $( function() {'use strict';
 
 		cancelTask : function() {
 			app.editTask = null;
-		},
-
-		renderTask : function() {
-			try {
-				tasklistEl.listview('refresh');
-			} catch (e) {
-				console.log("tasklist refresh failed");
-			}
-		},
-
-		resetTask : function() {
-			tasklistEl.html('');
-			var addRender = function(task) {
-				this.addTask(task).render();
-			};
-			app.taskCol.each(addRender, this);
-			this.renderTask();
-		},
-
-		addTask : function(task) {
-			console.log('add task: ' + task.get('name'));
-			var view = new app.TaskLView({
-				model : task
-			});
-			tasklistEl.append(view.$el);
-			return view;
 		},
 
 		doneChanged : function() {
