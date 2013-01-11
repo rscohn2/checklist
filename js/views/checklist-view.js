@@ -3,7 +3,7 @@ var app = app || {};
 // References DOM so delay execution
 $(function() {'use strict';
 
-	app.ChecklistView = Backbone.View.extend({
+	app.ChecklistSView = Backbone.View.extend({
 
 		tagName : 'option',
 
@@ -11,7 +11,6 @@ $(function() {'use strict';
 		},
 
 		initialize : function() {
-			console.log('checlist view initialized');
 			this.model.on('change', this.change, this);
 			this.model.on('destroy', this.remove, this);
 		},
@@ -21,13 +20,12 @@ $(function() {'use strict';
 		},
 
 		change : function() {
-			console.log('change checklist: ' + this.model.get('name'));
 			this.render();
 		},
 
 		render : function() {
 			console.log('render checklist' + this.model.get('name'));
-			this.$el.attribute('value', cid);
+			this.$el.val(this.model.cid);
 			this.$el.text(this.model.escape('name'));
 			return this;
 		},
@@ -68,7 +66,10 @@ $(function() {'use strict';
 			Backbone.sync('update', this.model, o);
 		},
 
-		// Remember the <a> so we can update it when there is a change event
+		/*
+		 * jqm puts some divs between the <li> and <a>, backbone keeps a handle for the <li>
+		 * so keep a handle for the <a>, too. Consider using jquery to find the <a> from the <li>
+		 */
 		$a : null,
 
 		render : function() {

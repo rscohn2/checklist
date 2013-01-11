@@ -10,7 +10,7 @@ $( function() {'use strict';
 	var taskDoneLatEl = $('#taskDoneLat');
 	var taskDoneLongEl = $('#taskDoneLong');
 	var taskDoneDateEl = $('#taskDoneDate');
-	
+
 	var checklistNameEl = $('#checklistName');
 	var checklistDescriptionEl = $('#checklistDescription');
 
@@ -21,19 +21,22 @@ $( function() {'use strict';
 		taskDoneLongEl.text(task.doneLong);
 		taskDoneDateEl.text(task.doneDate);
 		taskDoneEl.prop('checked', task.done);
-		try {
-			taskDoneEl.checkboxradio('refresh');
-		} catch(e) {
-			console.log('refresh of task done failed');
-		}
-
+		app.refresh(taskDoneEl, taskDoneEl.checkboxradio);
 	};
 
 	app.populateChecklistForm = function(checklist) {
 		checklistNameEl.val(checklist.name);
 		checklistDescriptionEl.val(checklist.description);
 	};
-	
+
+	app.refresh = function(object, constructor) {
+		try {
+			constructor.call(object, 'refresh');
+		} catch(e) {
+			console.log('Refresh failed: ' + constructor.toString());
+		}
+	};
+
 	// The Application
 	// ---------------
 
@@ -61,12 +64,8 @@ $( function() {'use strict';
 			// Create the views
 			app.checklistColLView = new app.ChecklistColLView();
 			app.taskColLView = new app.TaskColLView();
-			
-			// Create the views
-			//app.TaskForm = new app.TaskFormView();
-			//app.taskColChecklistSelect = new app.ChecklistSelectView({el: '#taskColChecklistSelect'});
-			//app.tasklistChecklistSelect.newOption = false;
-			//app.taskFormChecklistSelect = new app.ChecklistSelectView({el: '#taskFormChecklistSelect'});
+			app.taskChecklistColSView = new app.ChecklistColSView({el: '#taskChecklistSelect'});
+			app.taskFormChecklistColSView = new app.ChecklistColSView({el: '#taskFormChecklistSelect'});
 
 			// Fetch the data
 			app.taskCol.fetch();
@@ -81,7 +80,10 @@ $( function() {'use strict';
 		},
 
 		newChecklist : function() {
-			app.populateChecklistForm({name: '', description: ''});
+			app.populateChecklistForm({
+				name : '',
+				description : ''
+			});
 			app.editChecklist = null;
 		},
 

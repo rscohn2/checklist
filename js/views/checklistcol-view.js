@@ -15,11 +15,7 @@ $( function() {'use strict';
 		},
 		
 		render : function() {
-			try {
-				this.$el.listview('refresh');
-			} catch (e) {
-				console.log("checklist refresh failed");
-			}
+			app.refresh(this.$el, this.$el.listview);
 		},
 
 		reset : function() {
@@ -41,53 +37,28 @@ $( function() {'use strict';
 		},
 	});
 
-	app.ChecklistSelectView = Backbone.View.extend({
+	app.ChecklistColSView = Backbone.View.extend({
 
 		events : {
-			'change' : 'selectChange'
 		},
 
 		initialize : function() {
 			console.log('Created checklist select');
 			app.checklistCol.on('change', this.render, this);
-			app.checklistCol.on('add', this.addOne, this);
+			app.checklistCol.on('add', this.add, this);
 			app.checklistCol.on('reset', this.reset, this);
-		},
-
-		addChecklist : function() {
-			$.mobile.changePage($('#checklistFormPage'));
-		},
-
-		selectChange : function() {
-			console.log('checklist select changed: ' + this.$el.val());
-			var selected = this.$el.val();
-			var ni = selected.indexOf('newOption');
-			if (ni != -1) {
-				// Deselect newOption
-				selected.splice(ni, 1);
-				this.$el.val(selected);
-				this.addChecklist();
-			}
 		},
 
 		render : function() {
 			console.log('Render ChecklistSelect');
-			this.$el.select('refresh');
+			app.refresh(this.$el, this.$el.select);
 		},
-
-		newOption : true,
 
 		reset : function(checklist) {
 			console.log('Reset checklistselect');
 			this.$el.html('');
-			if (this.newOption) {
-				var newOption = $(this.make('option', {
-					'value' : 'newOption'
-				}, 'New...'));
-				this.$el.append(newOption);
-			}
 			var addRender = function(checklist) {
-				this.addOne(checklist).render();
+				this.add(checklist).render();
 			};
 			// Render invdividual checklist
 			app.checklistCol.each(addRender, this);
@@ -95,8 +66,8 @@ $( function() {'use strict';
 			this.render();
 		},
 
-		addOne : function(checklist) {
-			var view = new app.ChecklistView({
+		add : function(checklist) {
+			var view = new app.ChecklistSView({
 				model : checklist
 			});
 			this.$el.append(view.$el);

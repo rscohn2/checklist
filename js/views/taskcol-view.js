@@ -15,11 +15,7 @@ $( function() {'use strict';
 		},
 		
 		render : function() {
-			try {
-				this.$el.listview('refresh');
-			} catch (e) {
-				console.log("tasklist refresh failed");
-			}
+			app.refresh(this.$el, this.$el.listview);
 		},
 
 		reset : function() {
