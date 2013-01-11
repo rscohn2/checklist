@@ -43,10 +43,12 @@ $( function() {'use strict';
 			'tap #saveTaskButton' : 'saveTask',
 			'tap #cancelTaskButton' : 'cancelTask',
 			'change #taskDone' : 'doneChanged',
+			'tap #deleteTaskButton' : 'deleteTask',
 
 			'tap #newChecklistButton' : 'newChecklist',
 			'tap #saveChecklistButton' : 'saveChecklist',
-			'tap #cancelChecklistButton' : 'cancelChecklist'
+			'tap #cancelChecklistButton' : 'cancelChecklist',
+			'tap #deleteChecklistButton' : 'deleteChecklist'
 
 		},
 
@@ -67,6 +69,13 @@ $( function() {'use strict';
 			// Fetch the data
 			app.taskCol.fetch();
 			app.checklistCol.fetch();
+		},
+
+		deleteChecklist : function() {
+			if (app.editChecklist) {
+				app.editChecklist.destroy();
+			}
+			app.editChecklist = null;
 		},
 
 		newChecklist : function() {
@@ -117,6 +126,14 @@ $( function() {'use strict';
 			});
 			checklistEl.append(view.$el);
 			return view;
+		},
+
+		deleteTask : function() {
+			console.log('delete task');
+			if (app.editTask) {
+				app.editTask.destroy();
+			}
+			app.editTask = null;
 		},
 
 		newTask : function() {
