@@ -52,25 +52,17 @@ $( function() {'use strict';
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
-			'tap #saveTaskButton' : 'saveTask',
-			'tap #cancelTaskButton' : 'cancelTask',
-			'change #taskDone' : 'doneChanged',
-			'tap #deleteTaskButton' : 'deleteTask',
-
 			'tap #newChecklistButton' : 'newChecklist',
 			'tap #saveChecklistButton' : 'saveChecklist',
 			'tap #cancelChecklistButton' : 'cancelChecklist',
 			'tap #deleteChecklistButton' : 'deleteChecklist'
-
 		},
 
 		initialize : function() {
 			// Create the views
 			app.checklistColLView = new app.ChecklistColLView();
 			app.taskPage.view = new app.taskPage.View();
-			app.taskFormChecklistColSView = new app.ChecklistColSView({
-				el : '#taskFormChecklistSelect'
-			});
+			app.taskFormPage.view = new app.taskFormPage.View();
 
 			// Fetch the data
 			app.taskCol.fetch();
@@ -110,12 +102,26 @@ $( function() {'use strict';
 			app.editChecklist = null;
 		},
 
-		deleteTask : function() {
-			console.log('delete task');
-			if (app.editTask) {
-				app.editTask.destroy();
-			}
-			app.editTask = null;
+	});
+
+	app.taskPage = {};
+
+	app.taskPage.View = Backbone.View.extend({
+
+		el : '#taskPage',
+
+		// Delegated events for creating new items, and clearing completed ones.
+		events : {
+			'tap #newTaskButton' : 'newTask',
+		},
+
+		initialize : function() {
+			// Create the views
+			app.taskPage.taskColLView = new app.TaskColLView();
+			app.taskPage.checklistColSView = new app.ChecklistColSView({
+				el : '#taskChecklistSelect'
+			});
+
 		},
 
 		newTask : function() {
@@ -127,6 +133,36 @@ $( function() {'use strict';
 				doneDate : '',
 				done : false
 			})
+			app.editTask = null;
+		},
+	});
+
+	app.taskFormPage = {};
+	
+	app.taskFormPage.View = Backbone.View.extend({
+
+		el : '#taskFormPage',
+
+		// Delegated events for creating new items, and clearing completed ones.
+		events : {
+			'tap #saveTaskButton' : 'saveTask',
+			'tap #cancelTaskButton' : 'cancelTask',
+			'change #taskDone' : 'doneChanged',
+			'tap #deleteTaskButton' : 'deleteTask',
+		},
+
+		initialize : function() {
+			// Create the views
+			app.taskFormChecklistColSView = new app.ChecklistColSView({
+				el : '#taskFormChecklistSelect'
+			});
+		},
+
+		deleteTask : function() {
+			console.log('delete task');
+			if (app.editTask) {
+				app.editTask.destroy();
+			}
 			app.editTask = null;
 		},
 
@@ -166,39 +202,6 @@ $( function() {'use strict';
 				taskDoneLongEl.text('');
 				taskDoneDateEl.text('');
 			}
-		},
-	});
-
-	app.taskPage = {};
-	
-	app.taskPage.View = Backbone.View.extend({
-
-		el : '#taskPage',
-
-		// Delegated events for creating new items, and clearing completed ones.
-		events : {
-			'tap #newTaskButton' : 'newTask',
-		},
-
-		initialize : function() {
-			// Create the views
-			app.taskPage.taskColLView = new app.TaskColLView();
-			app.taskPage.checklistColSView = new app.ChecklistColSView({
-				el : '#taskChecklistSelect'
-			});
-
-		},
-
-		newTask : function() {
-			app.populateTaskForm({
-				name : '',
-				description : '',
-				doneLat : '',
-				doneLong : '',
-				doneDate : '',
-				done : false
-			})
-			app.editTask = null;
 		},
 	});
 
