@@ -61,15 +61,8 @@ $( function() {'use strict';
 
 		refresh : function(object, constructor) {
 			// Widgets cannot/don't need to be refreshed until the page has been inited
-			if (!this.pageInit) {
-				return;
-			}
-
-			try {
+			if (this.pageInit) {
 				constructor.call(object, 'refresh');
-			} catch(e) {
-				console.log('Refresh failed: ' + object.prop('name'));
-				console.log('  message: ' + e.message);
 			}
 		},
 	});
