@@ -41,15 +41,25 @@ $( function() {'use strict';
 		},
 	});
 
+	// Some methods that are common to all page views
+	app.PageView = Backbone.View.extend({
+		pageInit : false,
+		onPageInit : function() {
+			console.log('PageInit: ' + this.$el.prop('id'));
+			this.pageInit = true;
+		}	
+	});
+	
 	app.taskPage = {};
 
-	app.taskPage.View = Backbone.View.extend({
+	app.taskPage.View = app.PageView.extend({
 
 		el : '#taskPage',
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
@@ -76,7 +86,7 @@ $( function() {'use strict';
 
 	app.taskFormPage = {};
 
-	app.taskFormPage.View = Backbone.View.extend({
+	app.taskFormPage.View = app.PageView.extend({
 
 		el : '#taskFormPage',
 
@@ -86,6 +96,7 @@ $( function() {'use strict';
 			'tap #cancelTaskButton' : 'cancelTask',
 			'change #taskDone' : 'doneChanged',
 			'tap #deleteTaskButton' : 'deleteTask',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
@@ -162,7 +173,7 @@ $( function() {'use strict';
 	});
 
 	app.checklistPage = {};
-	app.checklistPage.View = Backbone.View.extend({
+	app.checklistPage.View = app.PageView.extend({
 
 		el : '#checklistPage',
 
@@ -186,7 +197,7 @@ $( function() {'use strict';
 	});
 
 	app.checklistFormPage = {};
-	app.checklistFormPage.View = Backbone.View.extend({
+	app.checklistFormPage.View = app.PageView.extend({
 
 		el : '#checklistFormPage',
 
@@ -194,7 +205,8 @@ $( function() {'use strict';
 		events : {
 			'tap #saveChecklistButton' : 'saveChecklist',
 			'tap #cancelChecklistButton' : 'cancelChecklist',
-			'tap #deleteChecklistButton' : 'deleteChecklist'
+			'tap #deleteChecklistButton' : 'deleteChecklist',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
