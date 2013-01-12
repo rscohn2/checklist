@@ -15,10 +15,12 @@ $( function() {'use strict';
 		},
 		
 		render : function() {
+			app.logEvent('Render', this);
 			app.refresh(this.$el, this.$el.listview);
 		},
 
 		reset : function() {
+			app.logEvent('Reset', this);
 			this.$el.html('');
 			var addRender = function(checklist) {
 				this.add(checklist).render();
@@ -28,7 +30,7 @@ $( function() {'use strict';
 		},
 
 		add : function(checklist) {
-			console.log('add checklist: ' + checklist.get('name'));
+			app.logEvent('Add', this);
 			var view = new app.ChecklistLView({
 				model : checklist
 			});
@@ -47,15 +49,21 @@ $( function() {'use strict';
 			app.checklistCol.on('change', this.render, this);
 			app.checklistCol.on('add', this.add, this);
 			app.checklistCol.on('reset', this.reset, this);
+			app.checklistCol.on('destroy', this.destroy, this);
 		},
 
+		destroy : function() {
+			app.logEvent('Destroy', this);
+			this.render();
+		},
+		
 		render : function() {
-			console.log('Render ChecklistSelect');
-			app.refresh(this.$el, this.$el.select);
+			app.logEvent('Render', this);
+			app.refresh(this.$el, this.$el.selectmenu);
 		},
 
 		reset : function(checklist) {
-			console.log('Reset checklistselect');
+			app.logEvent('Reset', this);
 			this.$el.html('');
 			var addRender = function(checklist) {
 				this.add(checklist).render();
@@ -67,6 +75,7 @@ $( function() {'use strict';
 		},
 
 		add : function(checklist) {
+			app.logEvent('Add', this);
 			var view = new app.ChecklistSView({
 				model : checklist
 			});

@@ -33,8 +33,13 @@ $( function() {'use strict';
 		try {
 			constructor.call(object, 'refresh');
 		} catch(e) {
-			console.log('Refresh failed: ' + constructor.toString());
+			console.log('Refresh failed: ' + object.prop('name'));
+			console.log('  message: ' + e.message);
 		}
+	};
+	
+	app.logEvent = function(event, o) {
+		console.log(event + ': ' + o.$el.prop('id'));	
 	};
 
 	// The Application
