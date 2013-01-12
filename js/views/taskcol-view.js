@@ -15,7 +15,7 @@ $( function() {'use strict';
 		},
 		
 		render : function() {
-			app.refresh(this.$el, this.$el.listview);
+			this.options.page.refresh(this.$el, this.$el.listview);
 		},
 
 		reset : function() {
