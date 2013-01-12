@@ -36,6 +36,9 @@
 							<li>
 								<a href='#checklistPage'>Checklists</a>
 							</li>
+							<li>
+								<a href='#settingsPage'>Settings</a>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -110,18 +113,6 @@
 						</ul>
 					</form>
 				</div>
-				<div data-role='footer' data-position='fixed'>
-					<div data-role="navbar">
-						<ul>
-							<li>
-								<a href='#taskPage' data-icon='home'>Tasks</a>
-							</li>
-							<li>
-								<a href='#checklistPage'>Checklists</a>
-							</li>
-						</ul>
-					</div>
-				</div>
 			</div>
 
 			<div data-role="page" id="checklistPage" data-theme="b">
@@ -143,6 +134,10 @@
 							<li>
 								<a href='#checklistPage'>Checklists</a>
 							</li>
+							<li>
+								<a href='#settingsPage'>Settings</a>
+							</li>
+
 						</ul>
 					</div>
 				</div>
@@ -173,6 +168,62 @@
 						</ul>
 					</form>
 				</div>
+			</div>
+			<div data-role="page" id="settingsPage" data-add-back-button='true' data-theme="b">
+				<div data-role="header" data-position="fixed" data-theme="b">
+					<h1>Settings</h1>
+				</div>
+
+				<div data-role="content">
+					<legend>
+						<h2>Database</h2>
+					</legend>
+					<div data-role='controlgroup' data-type='horizontal'>
+						<div data-role="button" data-inline="true" id="resetDatabase">
+							Reset
+						</div>
+						<div data-role="button" data-inline="true" id="populateDatabase">
+							Populate
+						</div>
+					</div>
+
+					<legend>
+						<h2>Authentication</h2>
+					</legend>
+					<div data-role='fieldcontainer'>
+						<label for='email'>Email:</label>
+						<input type='email' id='email' name='email'>
+						<label for='password'>Password:</label>
+						<input type='password' id='password' name='password'>
+					</div>
+
+					<div data-role='controlgroup' data-type='horizontal'>
+						<div data-role="button" data-inline="true" id="loginButton">
+							Login
+						</div>
+						<div data-role="button" data-inline="true" id="logoutButton">
+							Logout
+						</div>
+						<div data-role="button" data-inline="true" id="registerButton">
+							Register
+						</div>
+						<div data-role="button" data-inline="true" id="passwordResetButton">
+							Password Reset
+						</div>
+
+					</div>
+					<legend>
+						<h2>Backend</h2>
+					</legend>
+					<div data-role='controlgroup' data-type='vertical'>
+						<label for='localStorage'>localStorage</label>
+						<input type='radio' id='localStorage' name='backend' value='localStorage'>
+
+						<label for='Parse'>Parse</label>
+						<input type='radio' id='Parse' name='backend' value='Parse'>
+					</div>
+				</div>
+
 				<div data-role='footer' data-position='fixed'>
 					<div data-role="navbar">
 						<ul>
@@ -182,6 +233,10 @@
 							<li>
 								<a href='#checklistPage'>Checklists</a>
 							</li>
+							<li>
+								<a href='#settingsPage'>Settings</a>
+							</li>
+
 						</ul>
 					</div>
 				</div>
