@@ -3,15 +3,6 @@ var app = app || {};
 // References DOM, so delay until ready
 $( function() {'use strict';
 
-	app.refresh = function(object, constructor) {
-		try {
-			constructor.call(object, 'refresh');
-		} catch(e) {
-			console.log('Refresh failed: ' + object.prop('name'));
-			console.log('  message: ' + e.message);
-		}
-	};
-
 	app.logEvent = function(event, o) {
 		console.log(event + ': ' + o.$el.prop('id'));
 	};
@@ -35,28 +26,67 @@ $( function() {'use strict';
 			app.checklistPage.view = new app.checklistPage.View();
 			app.checklistFormPage.view = new app.checklistFormPage.View();
 
+			switch(window.location.hash) {
+				case '':
+				case '#taskPage':
+					app.taskPage.view.onPageInit();
+					break;
+				case '#taskFormPage':
+					app.taskFormPage.view.onPageInit();
+					break;
+				case '#checklistPage':
+					app.checklistPage.view.onPageInit();
+					break;
+				case '#checklistFormPage':
+					app.checklistFormPage.view.onPageInit();
+					break;
+				default:
+					console.error('Unknown page: ' + window.location.hash);
+					break;
+			}
+
 			// Fetch the data
 			app.taskCol.fetch();
 			app.checklistCol.fetch();
 		},
 	});
 
+	// Some methods that are common to all page views
+	app.PageView = Backbone.View.extend({
+		pageInit : false,
+		onPageInit : function() {
+			console.log('PageInit: ' + this.$el.prop('id'));
+			this.pageInit = true;
+		},
+
+		refresh : function(object, constructor) {
+			// Widgets cannot/don't need to be refreshed until the page has been inited
+			if (this.pageInit) {
+				constructor.call(object, 'refresh');
+			}
+		},
+	});
+
 	app.taskPage = {};
 
-	app.taskPage.View = Backbone.View.extend({
+	app.taskPage.View = app.PageView.extend({
 
 		el : '#taskPage',
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
 			// Create the views
-			app.taskPage.taskColLView = new app.TaskColLView();
+			app.taskPage.taskColLView = new app.TaskColLView({
+				page : this
+			});
 			app.taskPage.checklistColSView = new app.ChecklistColSView({
-				el : '#taskChecklistSelect'
+				el : '#taskChecklistSelect',
+				page : this
 			});
 
 		},
@@ -76,7 +106,7 @@ $( function() {'use strict';
 
 	app.taskFormPage = {};
 
-	app.taskFormPage.View = Backbone.View.extend({
+	app.taskFormPage.View = app.PageView.extend({
 
 		el : '#taskFormPage',
 
@@ -86,12 +116,14 @@ $( function() {'use strict';
 			'tap #cancelTaskButton' : 'cancelTask',
 			'change #taskDone' : 'doneChanged',
 			'tap #deleteTaskButton' : 'deleteTask',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
 			// Create the views
 			app.taskFormChecklistColSView = new app.ChecklistColSView({
-				el : '#taskFormChecklistSelect'
+				el : '#taskFormChecklistSelect',
+				page : this
 			});
 		},
 
@@ -148,7 +180,7 @@ $( function() {'use strict';
 			this.doneLongEl.text(task.doneLong);
 			this.doneDateEl.text(task.doneDate);
 			this.doneEl.prop('checked', task.done);
-			app.refresh(this.doneEl, this.doneEl.checkboxradio);
+			this.refresh(this.doneEl, this.doneEl.checkboxradio);
 		},
 
 		// jquery handles for the elements that contain inputs
@@ -162,18 +194,21 @@ $( function() {'use strict';
 	});
 
 	app.checklistPage = {};
-	app.checklistPage.View = Backbone.View.extend({
+	app.checklistPage.View = app.PageView.extend({
 
 		el : '#checklistPage',
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newChecklistButton' : 'newChecklist',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {
 			// Create the views
-			app.checklistColLView = new app.ChecklistColLView();
+			app.checklistColLView = new app.ChecklistColLView({
+				page : this
+			});
 		},
 
 		newChecklist : function() {
@@ -186,7 +221,7 @@ $( function() {'use strict';
 	});
 
 	app.checklistFormPage = {};
-	app.checklistFormPage.View = Backbone.View.extend({
+	app.checklistFormPage.View = app.PageView.extend({
 
 		el : '#checklistFormPage',
 
@@ -194,7 +229,8 @@ $( function() {'use strict';
 		events : {
 			'tap #saveChecklistButton' : 'saveChecklist',
 			'tap #cancelChecklistButton' : 'cancelChecklist',
-			'tap #deleteChecklistButton' : 'deleteChecklist'
+			'tap #deleteChecklistButton' : 'deleteChecklist',
+			'pageinit' : 'onPageInit'
 		},
 
 		initialize : function() {

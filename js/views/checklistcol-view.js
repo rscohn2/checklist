@@ -16,7 +16,7 @@ $( function() {'use strict';
 		
 		render : function() {
 			app.logEvent('Render', this);
-			app.refresh(this.$el, this.$el.listview);
+			this.options.page.refresh(this.$el, this.$el.listview);
 		},
 
 		reset : function() {
@@ -65,7 +65,7 @@ $( function() {'use strict';
 			 * thing. JQM prepends the select DOM stuff so you have to be careful to throw away everything if you
 			 * want to start over.
 			 */			
-			app.refresh(this.$el, this.$el.selectmenu);
+			this.options.page.refresh(this.$el, this.$el.selectmenu);
 		},
 
 		reset : function(checklist) {
