@@ -4,7 +4,7 @@ var app = app || {};
 			defaults : {
 				name : '',
 				description: '',
-				checklist : null,
+				checklist : [],
 				dueDate : null,
 				doneDate : null,
 				doneLat : null,

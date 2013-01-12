@@ -12,11 +12,14 @@ $( function() {'use strict';
 			app.taskCol.on('change', this.render, this);
 			app.taskCol.on('add', this.add, this);
 			app.taskCol.on('reset', this.reset, this);
-			app.taskCol.on('filter', this.filter, this);
 		},
 		
-		filter : function() {
-				
+		filterChecklist : function(checklist) {
+			var f = function(m) {
+				m.trigger('filterChecklist', checklist);
+			}
+			app.taskCol.each(f, this);	
+			this.render();
 		},
 		
 		render : function() {

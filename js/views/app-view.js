@@ -5,8 +5,7 @@ $( function() {'use strict';
 
 	app.logEvent = function(event, o) {
 		console.log(event + ': ' + o.$el.prop('id'));
-	};
-
+	}
 	// The Application
 	// ---------------
 
@@ -76,7 +75,22 @@ $( function() {'use strict';
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
-			'pageinit' : 'onPageInit'
+			'pageinit' : 'onPageInit',
+			'change #taskChecklistSelect' : 'filterChecklist'
+		},
+
+		filterChecklist : function() {
+			var checklists = {};
+			var selected = $(taskChecklistSelect).val();
+			if (selected) {
+				selected.forEach(function(cl) {
+					checklists[cl] = true;
+				});
+			} else {
+				checklists = null;
+			}
+			app.taskPage.taskColLView.filterChecklist(checklists);
+
 		},
 
 		initialize : function() {
