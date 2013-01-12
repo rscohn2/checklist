@@ -59,6 +59,12 @@ $( function() {'use strict';
 		
 		render : function() {
 			app.logEvent('Render', this);
+			/*
+			 * Be careful, refresh just updates the count. This is fine for native select, since it uses select/option.
+			 * If you are using non-native (jqm) select, then it will not be updated and you need to rebuild the whole
+			 * thing. JQM prepends the select DOM stuff so you have to be careful to throw away everything if you
+			 * want to start over.
+			 */			
 			app.refresh(this.$el, this.$el.selectmenu);
 		},
 
