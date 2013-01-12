@@ -5,8 +5,7 @@ $( function() {'use strict';
 
 	app.logEvent = function(event, o) {
 		console.log(event + ': ' + o.$el.prop('id'));
-	};
-
+	}
 	// The Application
 	// ---------------
 
@@ -76,7 +75,22 @@ $( function() {'use strict';
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
 			'tap #newTaskButton' : 'newTask',
-			'pageinit' : 'onPageInit'
+			'pageinit' : 'onPageInit',
+			'change #taskChecklistSelect' : 'filterChecklist'
+		},
+
+		filterChecklist : function() {
+			var checklists = {};
+			var selected = $(taskChecklistSelect).val();
+			if (selected) {
+				selected.forEach(function(cl) {
+					checklists[cl] = true;
+				});
+			} else {
+				checklists = null;
+			}
+			app.taskPage.taskColLView.filterChecklist(checklists);
+
 		},
 
 		initialize : function() {
@@ -95,6 +109,7 @@ $( function() {'use strict';
 			app.taskFormPage.view.populateForm({
 				name : '',
 				description : '',
+				checklist : [],
 				doneLat : '',
 				doneLong : '',
 				doneDate : '',
@@ -142,7 +157,8 @@ $( function() {'use strict';
 				doneLat : this.doneLatEl.text(),
 				doneLong : this.doneLongEl.text(),
 				doneDate : this.doneDateEl.text(),
-				done : this.doneEl.prop('checked')
+				done : this.doneEl.prop('checked'),
+				checklist : this.checklistEl.val()
 			};
 
 			if (app.editTask) {
@@ -179,6 +195,8 @@ $( function() {'use strict';
 			this.doneLatEl.text(task.doneLat);
 			this.doneLongEl.text(task.doneLong);
 			this.doneDateEl.text(task.doneDate);
+			this.checklistEl.val(task.checklist);
+			this.refresh(this.checklistEl, this.checklistEl.selectmenu);
 			this.doneEl.prop('checked', task.done);
 			this.refresh(this.doneEl, this.doneEl.checkboxradio);
 		},
@@ -186,6 +204,7 @@ $( function() {'use strict';
 		// jquery handles for the elements that contain inputs
 		nameEl : $('#taskName'),
 		descriptionEl : $('#taskDescription'),
+		checklistEl : $('#taskFormChecklistSelect'),
 		doneEl : $('#taskDone'),
 		doneLatEl : $('#taskDoneLat'),
 		doneLongEl : $('#taskDoneLong'),

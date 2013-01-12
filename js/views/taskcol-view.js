@@ -14,6 +14,14 @@ $( function() {'use strict';
 			app.taskCol.on('reset', this.reset, this);
 		},
 		
+		filterChecklist : function(checklist) {
+			var f = function(m) {
+				m.trigger('filterChecklist', checklist);
+			}
+			app.taskCol.each(f, this);	
+			this.render();
+		},
+		
 		render : function() {
 			this.options.page.refresh(this.$el, this.$el.listview);
 		},

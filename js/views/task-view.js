@@ -15,6 +15,19 @@ $(function() {'use strict';
 		initialize : function() {
 			this.model.on('change', this.change, this);
 			this.model.on('destroy', this.remove, this);
+			this.model.on('filterChecklist', this.filterChecklist, this);
+		},
+
+		filterChecklist : function(checklists) {
+			var modelChecklist = this.model.get('checklist');
+			var f = function(list) {
+				return checklists.hasOwnProperty(list);
+			}
+			if (checklists == null || (modelChecklist && modelChecklist.some(f))) {
+				this.$el.show();
+			} else {
+				this.$el.hide();
+			}
 		},
 
 		edit : function() {
