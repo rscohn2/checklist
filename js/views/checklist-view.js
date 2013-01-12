@@ -21,7 +21,7 @@ $(function() {'use strict';
 
 		render : function() {
 			console.log('render checklist: ' + this.model.get('name'));
-			this.$el.val(this.model.cid);
+			this.$el.val(this.model.id);
 			this.$el.text(this.model.escape('name'));
 			return this;
 		},

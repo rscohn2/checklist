@@ -95,6 +95,7 @@ $( function() {'use strict';
 			app.taskFormPage.view.populateForm({
 				name : '',
 				description : '',
+				checklist : [],
 				doneLat : '',
 				doneLong : '',
 				doneDate : '',
@@ -142,7 +143,8 @@ $( function() {'use strict';
 				doneLat : this.doneLatEl.text(),
 				doneLong : this.doneLongEl.text(),
 				doneDate : this.doneDateEl.text(),
-				done : this.doneEl.prop('checked')
+				done : this.doneEl.prop('checked'),
+				checklist : this.checklistEl.val()
 			};
 
 			if (app.editTask) {
@@ -179,6 +181,8 @@ $( function() {'use strict';
 			this.doneLatEl.text(task.doneLat);
 			this.doneLongEl.text(task.doneLong);
 			this.doneDateEl.text(task.doneDate);
+			this.checklistEl.val(task.checklist);
+			this.refresh(this.checklistEl, this.checklistEl.selectmenu);
 			this.doneEl.prop('checked', task.done);
 			this.refresh(this.doneEl, this.doneEl.checkboxradio);
 		},
@@ -186,6 +190,7 @@ $( function() {'use strict';
 		// jquery handles for the elements that contain inputs
 		nameEl : $('#taskName'),
 		descriptionEl : $('#taskDescription'),
+		checklistEl : $('#taskFormChecklistSelect'),
 		doneEl : $('#taskDone'),
 		doneLatEl : $('#taskDoneLat'),
 		doneLongEl : $('#taskDoneLong'),
