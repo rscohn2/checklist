@@ -19,7 +19,7 @@ $(function() {'use strict';
 
 		edit : function() {
 			app.editTask = this.model;
-			app.populateTaskForm(this.model.toJSON());
+			app.taskFormPage.view.populateForm(this.model.toJSON());
 		},
 
 		change : function() {

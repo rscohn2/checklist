@@ -3,32 +3,6 @@ var app = app || {};
 // References DOM, so delay until ready
 $( function() {'use strict';
 
-	// jquery handles for the elements that contain inputs
-	var taskNameEl = $('#taskName');
-	var taskDescriptionEl = $('#taskDescription');
-	var taskDoneEl = $('#taskDone');
-	var taskDoneLatEl = $('#taskDoneLat');
-	var taskDoneLongEl = $('#taskDoneLong');
-	var taskDoneDateEl = $('#taskDoneDate');
-
-	var checklistNameEl = $('#checklistName');
-	var checklistDescriptionEl = $('#checklistDescription');
-
-	app.populateTaskForm = function(task) {
-		taskNameEl.val(task.name);
-		taskDescriptionEl.val(task.description);
-		taskDoneLatEl.text(task.doneLat);
-		taskDoneLongEl.text(task.doneLong);
-		taskDoneDateEl.text(task.doneDate);
-		taskDoneEl.prop('checked', task.done);
-		app.refresh(taskDoneEl, taskDoneEl.checkboxradio);
-	};
-
-	app.populateChecklistForm = function(checklist) {
-		checklistNameEl.val(checklist.name);
-		checklistDescriptionEl.val(checklist.description);
-	};
-
 	app.refresh = function(object, constructor) {
 		try {
 			constructor.call(object, 'refresh');
@@ -52,56 +26,19 @@ $( function() {'use strict';
 
 		// Delegated events for creating new items, and clearing completed ones.
 		events : {
-			'tap #newChecklistButton' : 'newChecklist',
-			'tap #saveChecklistButton' : 'saveChecklist',
-			'tap #cancelChecklistButton' : 'cancelChecklist',
-			'tap #deleteChecklistButton' : 'deleteChecklist'
 		},
 
 		initialize : function() {
 			// Create the views
-			app.checklistColLView = new app.ChecklistColLView();
 			app.taskPage.view = new app.taskPage.View();
 			app.taskFormPage.view = new app.taskFormPage.View();
+			app.checklistPage.view = new app.checklistPage.View();
+			app.checklistFormPage.view = new app.checklistFormPage.View();
 
 			// Fetch the data
 			app.taskCol.fetch();
 			app.checklistCol.fetch();
 		},
-
-		deleteChecklist : function() {
-			if (app.editChecklist) {
-				app.editChecklist.destroy();
-			}
-			app.editChecklist = null;
-		},
-
-		newChecklist : function() {
-			app.populateChecklistForm({
-				name : '',
-				description : ''
-			});
-			app.editChecklist = null;
-		},
-
-		saveChecklist : function() {
-			var o = {
-				name : checklistNameEl.val(),
-				description : checklistDescriptionEl.val()
-			};
-
-			if (app.editChecklist) {
-				app.editChecklist.set(o);
-				app.editChecklist = null;
-			} else {
-				app.checklistCol.create(o);
-			}
-		},
-
-		cancelChecklist : function() {
-			app.editChecklist = null;
-		},
-
 	});
 
 	app.taskPage = {};
@@ -125,7 +62,7 @@ $( function() {'use strict';
 		},
 
 		newTask : function() {
-			app.populateTaskForm({
+			app.taskFormPage.view.populateForm({
 				name : '',
 				description : '',
 				doneLat : '',
@@ -138,7 +75,7 @@ $( function() {'use strict';
 	});
 
 	app.taskFormPage = {};
-	
+
 	app.taskFormPage.View = Backbone.View.extend({
 
 		el : '#taskFormPage',
@@ -168,12 +105,12 @@ $( function() {'use strict';
 
 		saveTask : function() {
 			var o = {
-				name : taskNameEl.val(),
-				description : taskDescriptionEl.val(),
-				doneLat : taskDoneLatEl.text(),
-				doneLong : taskDoneLongEl.text(),
-				doneDate : taskDoneDateEl.text(),
-				done : taskDoneEl.prop('checked')
+				name : this.nameEl.val(),
+				description : this.descriptionEl.val(),
+				doneLat : this.doneLatEl.text(),
+				doneLong : this.doneLongEl.text(),
+				doneDate : this.doneDateEl.text(),
+				done : this.doneEl.prop('checked')
 			};
 
 			if (app.editTask) {
@@ -190,19 +127,112 @@ $( function() {'use strict';
 
 		doneChanged : function() {
 			console.log('Done changed');
-			var done = taskDoneEl.prop('checked');
+			var done = this.doneEl.prop('checked');
 			if (done) {
-				taskDoneDateEl.text(new Date());
+				this.doneDateEl.text(new Date());
 				navigator.geolocation.getCurrentPosition(function(pos) {
-					taskDoneLatEl.text(pos.coords.latitude);
-					taskDoneLongEl.text(pos.coords.longitude);
+					this.doneLatEl.text(pos.coords.latitude);
+					this.doneLongEl.text(pos.coords.longitude);
 				});
 			} else {
-				taskDoneLatEl.text('');
-				taskDoneLongEl.text('');
-				taskDoneDateEl.text('');
+				this.doneLatEl.text('');
+				this.doneLongEl.text('');
+				this.doneDateEl.text('');
 			}
 		},
+
+		populateForm : function(task) {
+			this.nameEl.val(task.name);
+			this.descriptionEl.val(task.description);
+			this.doneLatEl.text(task.doneLat);
+			this.doneLongEl.text(task.doneLong);
+			this.doneDateEl.text(task.doneDate);
+			this.doneEl.prop('checked', task.done);
+			app.refresh(this.doneEl, this.doneEl.checkboxradio);
+		},
+
+		// jquery handles for the elements that contain inputs
+		nameEl : $('#taskName'),
+		descriptionEl : $('#taskDescription'),
+		doneEl : $('#taskDone'),
+		doneLatEl : $('#taskDoneLat'),
+		doneLongEl : $('#taskDoneLong'),
+		doneDateEl : $('#taskDoneDate'),
+
+	});
+
+	app.checklistPage = {};
+	app.checklistPage.View = Backbone.View.extend({
+
+		el : '#checklistPage',
+
+		// Delegated events for creating new items, and clearing completed ones.
+		events : {
+			'tap #newChecklistButton' : 'newChecklist',
+		},
+
+		initialize : function() {
+			// Create the views
+			app.checklistColLView = new app.ChecklistColLView();
+		},
+
+		newChecklist : function() {
+			app.checklistFormPage.view.populateForm({
+				name : '',
+				description : ''
+			});
+			app.editChecklist = null;
+		},
+	});
+
+	app.checklistFormPage = {};
+	app.checklistFormPage.View = Backbone.View.extend({
+
+		el : '#checklistFormPage',
+
+		// Delegated events for creating new items, and clearing completed ones.
+		events : {
+			'tap #saveChecklistButton' : 'saveChecklist',
+			'tap #cancelChecklistButton' : 'cancelChecklist',
+			'tap #deleteChecklistButton' : 'deleteChecklist'
+		},
+
+		initialize : function() {
+		},
+
+		deleteChecklist : function() {
+			if (app.editChecklist) {
+				app.editChecklist.destroy();
+			}
+			app.editChecklist = null;
+		},
+
+		saveChecklist : function() {
+			var o = {
+				name : this.nameEl.val(),
+				description : this.descriptionEl.val()
+			};
+
+			if (app.editChecklist) {
+				app.editChecklist.set(o);
+				app.editChecklist = null;
+			} else {
+				app.checklistCol.create(o);
+			}
+		},
+
+		cancelChecklist : function() {
+			app.editChecklist = null;
+		},
+
+		populateForm : function(checklist) {
+			this.nameEl.val(checklist.name);
+			this.descriptionEl.val(checklist.description);
+		},
+
+		nameEl : $('#checklistName'),
+		descriptionEl : $('#checklistDescription')
+
 	});
 
 }())

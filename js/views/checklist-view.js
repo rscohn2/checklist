@@ -44,7 +44,7 @@ $(function() {'use strict';
 		edit : function() {
 			console.log('checklist edit: ' + this.model.name);
 			app.editChecklist = this.model;
-			app.populateChecklistForm(this.model.toJSON());
+			app.checklistFormPage.view.populateForm(this.model.toJSON());
 		},
 
 		change : function() {
